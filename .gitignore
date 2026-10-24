@@ -1,0 +1,8 @@
+# Maven 编译产物
+target/
+
+# 邮箱配置与授权码
+src/main/resources/mail.properties
+
+# MySQL 数据库配置
+src/main/resources/mysql.properties
