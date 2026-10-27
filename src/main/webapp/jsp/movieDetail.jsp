@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="../static/css/main.css">
     <link rel="stylesheet" type="text/css" href="../static/css/footer.css">
     <link rel="stylesheet" type="text/css" href="../static/css/buyTickets.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/movieDetail.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/movieDetail.css?v=2">
     <script src="../static/js/header.js" charset="utf-8"></script>
     <script src="../static/js/Api.js"></script>
 
@@ -419,6 +419,9 @@
                                 $.ajax({
                                     type:'post',
                                     url: url + "/comment/addCommentByUser",
+                                    xhrFields: {
+                                        withCredentials: true
+                                    },
                                     dataType:'json',
                                     data: {
                                         movie_id: movie_id,
@@ -433,6 +436,10 @@
                                                 }
                                             );
                                         }else{
+                                            if(obj.msg && obj.msg.indexOf("未登录") >= 0){
+                                                localStorage.removeItem("userJson");
+                                                obj.msg = "登录会话已过期，请重新登录后再评论。";
+                                            }
                                             layer.alert(obj.msg,{icon: 0,offset: clientHeight/5},
                                                 function (){
                                                     layer.closeAll();
@@ -599,5 +606,6 @@
     </script>
     <!-- ------------------------------------------------------------------- -->
 
+<script src="../static/js/MovieDetail.js?v=3"></script>
 </body>
 </html>

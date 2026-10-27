@@ -23,6 +23,9 @@ import com.entity.Cinema;
 import com.entity.Movie;
 import com.service.ICinemaService;
 import com.service.IMovieService;
+import com.service.ITmdbMovieSyncService;
+import com.service.dto.TmdbSyncResult;
+import com.service.imp.TmdbMovieScheduledSyncService;
 import com.util.UUIDUtil;
 
 /**
@@ -36,6 +39,10 @@ public class MovieController {
 	private IMovieService movieService;
 	@Resource
 	private ICinemaService cinemaService;
+	@Resource
+	private ITmdbMovieSyncService tmdbMovieSyncService;
+	@Resource
+	private TmdbMovieScheduledSyncService tmdbScheduledSyncService;
 	//1.电影详情页 findid
 	//2.首页电影列表 + name搜索 + type搜素 + 时间、参评人数、评分排序 
 	//3.增加、删除、修改
@@ -52,6 +59,86 @@ public class MovieController {
 		return obj;
 	}
 	
+	@RequestMapping("refreshTmdbCast")
+	@ResponseBody
+	public JSONObject refreshTmdbCast(@RequestParam("movie_id") long movieId,
+									   @RequestParam("tmdb_movie_id") long tmdbMovieId) {
+		JSONObject obj = new JSONObject();
+		try {
+			boolean refreshed = tmdbMovieSyncService.refreshTmdbCast(movieId, tmdbMovieId);
+			obj.put("code", refreshed ? 0 : 200);
+			obj.put("updated", refreshed);
+		} catch (Exception exception) {
+			obj.put("code", 200);
+			obj.put("msg", exception.getMessage());
+		}
+		return obj;
+	}
+
+	@RequestMapping("syncTmdbCinemaMovies")
+	@ResponseBody
+	public JSONObject syncTmdbCinemaMovies() {
+		JSONObject obj = new JSONObject();
+		try {
+			TmdbSyncResult result = tmdbMovieSyncService.syncNowPlayingAndUpcoming();
+			obj.put("code", 0);
+			obj.put("inserted", result.getInserted());
+			obj.put("updated", result.getUpdated());
+			obj.put("skipped", result.getSkipped());
+			obj.put("archived", result.getArchived());
+			obj.put("errors", result.getErrors());
+		} catch (Exception exception) {
+			obj.put("code", 200);
+			obj.put("msg", exception.getMessage());
+		}
+		return obj;
+	}
+
+	@RequestMapping("getTmdbScheduleStatus")
+	@ResponseBody
+	public JSONObject getTmdbScheduleStatus() {
+		JSONObject obj = new JSONObject();
+		obj.put("code", 0);
+		obj.put("enabled", tmdbScheduledSyncService.isScheduleEnabled());
+		obj.put("running", tmdbScheduledSyncService.isRunning());
+		obj.put("intervalMs", tmdbScheduledSyncService.getScheduleIntervalMs());
+		obj.put("lastRunTime", tmdbScheduledSyncService.getLastRunTime());
+		obj.put("lastError", tmdbScheduledSyncService.getLastError());
+		obj.put("lastResult", tmdbScheduledSyncService.getLastResult());
+		return obj;
+	}
+
+	@RequestMapping("setTmdbScheduleEnabled")
+	@ResponseBody
+	public JSONObject setTmdbScheduleEnabled(@RequestParam("enabled") boolean enabled) {
+		JSONObject obj = new JSONObject();
+		tmdbScheduledSyncService.setScheduleEnabled(enabled);
+		obj.put("code", 0);
+		obj.put("enabled", enabled);
+		return obj;
+	}
+
+	@RequestMapping("runTmdbScheduleNow")
+	@ResponseBody
+	public JSONObject runTmdbScheduleNow() {
+		JSONObject obj = new JSONObject();
+		if (!tmdbScheduledSyncService.runNow()) {
+			obj.put("code", 200);
+			obj.put("msg", "TMDB院线同步正在运行");
+			return obj;
+		}
+
+		TmdbSyncResult result = tmdbScheduledSyncService.getLastResult();
+		obj.put("code", 0);
+		obj.put("inserted", result == null ? 0 : result.getInserted());
+		obj.put("updated", result == null ? 0 : result.getUpdated());
+		obj.put("skipped", result == null ? 0 : result.getSkipped());
+		obj.put("archived", result == null ? 0 : result.getArchived());
+		obj.put("errors", result == null ? null : result.getErrors());
+		obj.put("lastError", tmdbScheduledSyncService.getLastError());
+		return obj;
+	}
+
 	@RequestMapping("findAllMovies")
 	@ResponseBody
 	public JSONObject findAllMovies() {
@@ -177,6 +264,8 @@ public class MovieController {
 	@ResponseBody
 	public JSONObject updateMovie(@RequestParam(value="file",required=false)MultipartFile file,Movie movie,HttpServletRequest request) throws IOException{
 		JSONObject obj = new JSONObject();
+		Movie oldMovie = this.movieService.findMovieById(movie.getMovie_id());
+		movie.setMovie_tmdb_cast(oldMovie.getMovie_tmdb_cast());
 		if(file != null) {
 			String str = file.getOriginalFilename();
 			System.out.println("file:" + str);
@@ -189,7 +278,6 @@ public class MovieController {
 			System.out.println("文件写入成功,Path:" + path);
 			movie.setMovie_picture(filePath);
 		}else {
-			Movie oldMovie = this.movieService.findMovieById(movie.getMovie_id());
 			movie.setMovie_picture(oldMovie.getMovie_picture());
 		}
 		Integer rs = movieService.updateMovie(movie);

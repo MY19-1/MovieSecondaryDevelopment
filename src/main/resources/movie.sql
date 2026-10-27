@@ -190,6 +190,7 @@ CREATE TABLE `movie`  (
   `movie_cn_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '电影名称（中文）',
   `movie_fg_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '电影名称（外语）',
   `movie_actor` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '电影演职人员',
+  `movie_tmdb_cast` mediumtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'TMDB演职人员头像JSON',
   `movie_director` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '电影导演',
   `movie_detail` varchar(350) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '电影详情',
   `movie_duration` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '电影时长',

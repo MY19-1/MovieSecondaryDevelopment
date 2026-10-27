@@ -14,6 +14,8 @@ public interface MovieMapper {
 	Integer addMovie(Movie movie);
 	Integer deleteMovie(long movie_id);
 	Integer updateMovie(Movie movie);
+	Integer updateMovieState(@Param("movie_id") long movie_id, @Param("movie_state") int movie_state);
+	Integer updateTmdbCast(@Param("movie_id") long movie_id, @Param("movie_tmdb_cast") String movie_tmdb_cast);
 	Integer deleteMovieCommentCount(long movie_id);
 	Integer addMovieCommentCount(long movie_id);
 	Integer changeMovieBoxOffice(@Param("movie_boxOffice")float movie_boxOffice,@Param("movie_id")long movie_id);

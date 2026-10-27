@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<resultMap type="com.entity.Movie" id="BaseResultMap">
 		<id property="movie_id" column="movie_id" javaType="long"/>
 		<result property="movie_actor" column="movie_actor" javaType="java.lang.String"/>
+		<result property="movie_tmdb_cast" column="movie_tmdb_cast" javaType="java.lang.String"/>
 		<result property="movie_boxOffice" column="movie_boxOffice" javaType="float"/>  
 		<result property="movie_cn_name" column="movie_cn_name" javaType="java.lang.String"/>  
 		<result property="movie_commentCount" column="movie_commentCount" javaType="long"/>  
@@ -30,8 +31,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<insert id="addMovie" parameterType="com.entity.Movie">
-		insert into movie(movie_cn_name,movie_fg_name,movie_actor,movie_director,movie_detail,movie_duration,movie_type,movie_score,movie_releaseDate,movie_country,movie_picture)
-		values(#{movie_cn_name},#{movie_fg_name},#{movie_actor},#{movie_director},#{movie_detail},#{movie_duration},#{movie_type},#{movie_score},#{movie_releaseDate},#{movie_country},#{movie_picture})
+		insert into movie(movie_cn_name,movie_fg_name,movie_actor,movie_tmdb_cast,movie_director,movie_detail,movie_duration,movie_type,movie_score,movie_releaseDate,movie_country,movie_picture)
+		values(#{movie_cn_name},#{movie_fg_name},#{movie_actor},#{movie_tmdb_cast},#{movie_director},#{movie_detail},#{movie_duration},#{movie_type},#{movie_score},#{movie_releaseDate},#{movie_country},#{movie_picture})
 	</insert>
 	
 	<update id="deleteMovie" parameterType="long">
@@ -52,16 +53,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			movie_cn_name = #{movie_cn_name},
 			movie_fg_name = #{movie_fg_name},
 			movie_actor = #{movie_actor},
+			movie_tmdb_cast = #{movie_tmdb_cast},
 			movie_director = #{movie_director},
 			movie_detail = #{movie_detail},
 			movie_duration = #{movie_duration},
 			movie_type = #{movie_type},
+			movie_score = #{movie_score},
+			movie_commentCount = #{movie_commentCount},
+			movie_releaseDate = #{movie_releaseDate},
 			movie_country = #{movie_country},
 			movie_picture = #{movie_picture}
 		</set>
 		where movie_id = #{movie_id}
 	</update>
 	
+	<update id="updateMovieState">
+		update movie set movie_state = #{movie_state} where movie_id = #{movie_id}
+	</update>
+
+	<update id="updateTmdbCast">
+		update movie set movie_tmdb_cast = #{movie_tmdb_cast} where movie_id = #{movie_id}
+	</update>
+
 	<update id="deleteMovieCommentCount" parameterType="long">
 		update movie set movie_commentCount = movie_commentCount -1 where movie_id = #{movie_id}
 	</update>

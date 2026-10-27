@@ -52,7 +52,7 @@ function init_comment(){
                                     obj.data.commentList[i].comment_content +
                                 "</div>" +
                             "</div>" +
-                        "</ul>"
+                        "</li>"
                     );
                 }
             }
@@ -107,7 +107,7 @@ function init_comment(){
                                     obj.data.commentList[i].comment_content +
                                 "</div>" +
                             "</div>" +
-                        "</ul>"
+                        "</li>"
                     );
                 }
             }

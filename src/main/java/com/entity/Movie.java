@@ -11,6 +11,7 @@ public class Movie {
 	private String movie_cn_name;
 	private String movie_fg_name;
 	private String movie_actor;     //演职人员
+	private String movie_tmdb_cast; // TMDB 演职人员头像数据
 	private String movie_director;  //导演
 	private String movie_detail;    //电影详情
 	private String movie_duration;  //电影时长
@@ -53,6 +54,12 @@ public class Movie {
 	}
 	public void setMovie_actor(String movie_actor) {
 		this.movie_actor = movie_actor;
+	}
+	public String getMovie_tmdb_cast() {
+		return movie_tmdb_cast;
+	}
+	public void setMovie_tmdb_cast(String movie_tmdb_cast) {
+		this.movie_tmdb_cast = movie_tmdb_cast;
 	}
 	public String getMovie_director() {
 		return movie_director;

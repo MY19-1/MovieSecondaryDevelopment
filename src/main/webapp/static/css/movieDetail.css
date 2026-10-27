@@ -80,26 +80,37 @@
 	    display: table;
 	}
 	.tab-desc .celebrity-container .celebrity-group:first-child {
-    margin-left: 0;
+	    margin-left: 0;
+	}
+	.tab-desc .celebrity-container {
+	    display: flex;
+	    align-items: flex-start;
+	    gap: 45px;
+	    overflow-x: auto;
+	    padding-bottom: 8px;
 	}
 	.tab-desc .celebrity-container .celebrity-group {
-	    float: left;
-	    margin-left: 45px;
+	    float: none;
+	    flex: 0 0 auto;
+	    margin-left: 0;
 	}
 	.celebrity-container .celebrity-type {
     	margin-bottom: 16px;
 	}
 	.celebrity-container .celebrity-list {
-    	margin-left: -20px;
+	    display: flex;
+	    flex-wrap: nowrap;
+	    gap: 20px;
+	    margin-left: 0;
 	}
 	.tab-desc .celebrity-container .celebrity-group .celebrity {
-    margin-bottom: 0;
+	    flex: 0 0 128px;
+	    margin: 0;
 	}
 	.celebrity-container .celebrity {
-	    float: left;
+	    float: none;
 	    width: 128px;
-	    margin-left: 20px;
-	    margin-bottom: 20px;
+	    margin: 0 0 20px;
 	    text-overflow: ellipsis;
 	    white-space: nowrap;
 	}
@@ -243,6 +254,9 @@
     color: #666;
     line-height: 26px;
     font-size: 14px;
+	}
+	.tab-desc .staringPeople + .module {
+    clear: both;
 	}
 	.comment-entry {
 	    cursor: pointer;

@@ -118,7 +118,7 @@ public class UserController {
             EmailCodeInfoService.saveCode(email, code);
 
             // 4. 告诉前端发送成功
-            return "验证码发送成功";
+            return "success";
 
         } catch (Exception e) {
             // 打印异常，方便在 IDEA 控制台排查问题
@@ -141,7 +141,8 @@ public class UserController {
 	@RequestMapping("modifyUserPwd")
 	@ResponseBody
 	public String modifyUserPwd(@RequestParam("oldPwd")String oldPwd,@RequestParam("newPwd")String newPwd,HttpServletRequest request) {
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession()
+                ;
 		User user = (User)session.getAttribute("user");
 		if(user.getUser_pwd().equals(oldPwd)) {
 			user.setUser_pwd(newPwd);
