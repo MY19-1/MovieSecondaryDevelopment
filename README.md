@@ -71,3 +71,9 @@ TMDB 官网：https://www.themoviedb.org/
 ---
 
 持续学习，持续改进。
+![img_4.png](img_4.png)
+![img_5.png](img_5.png)
+![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)
+![img_3.png](img_3.png)
